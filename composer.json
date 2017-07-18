@@ -13,7 +13,7 @@
   "require": {
     "php": ">=5.5.9",
     "ext-curl": "*",
-    "errogaht/cdek": "^0.0.1"
+    "errogaht/cdek": "0.*"
   },
   "autoload": {
     "psr-4": { "Lopatinas\\CdekBundle\\": "" }
