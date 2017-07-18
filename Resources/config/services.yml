@@ -1,4 +1,7 @@
 services:
     cdek:
         class: Lopatinas\CdekBundle\Service\CdekService
-        arguments: []
+        calls:
+            - [setAccount, ["%cdek.account%"]]
+            - [setPassword, ["%cdek.password%"]]
+            - [init, []]

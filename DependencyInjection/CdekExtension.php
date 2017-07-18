@@ -14,6 +14,9 @@ class CdekExtension extends Extension
         $configuration = new Configuration();
         $config = $this->processConfiguration($configuration, $configs);
 
+        $container->setParameter('cdek.account', $config['account']);
+        $container->setParameter('cdek.password', $config['password']);
+
         $loader = new Loader\YamlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
         $loader->load('services.yml');
     }
