@@ -1,0 +1,4 @@
+services:
+    cdek:
+        class: Lopatinas\CdekBundle\Service\CdekService
+        arguments: []
