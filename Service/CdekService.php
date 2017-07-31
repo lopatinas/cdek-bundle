@@ -2,7 +2,6 @@
 
 namespace Lopatinas\CdekBundle\Service;
 
-use Errogaht\CDEK\CalculatePriceDeliveryCdek;
 use Errogaht\CDEK\CdekSdk;
 use Lopatinas\CdekBundle\Exception\CdekException;
 
@@ -51,28 +50,16 @@ class CdekService
      */
     public function calculate(array $data)
     {
-        $calculator = new CalculatePriceDeliveryCdek();
-        $calculator->setAuth($this->account, $this->password);
-        try {
-            $calculator->setDateExecute($data['date']);
-            $calculator->setReceiverCityId($data['receiverCityId']);
-            $calculator->setSenderCityId($data['senderCityId']);
-            $calculator->setTariffId($data['tariffId']);
-            $calculator->setModeDeliveryId($data['deliveryModeId']);
-            foreach ($data['items'] as $item) {
-                if (!empty($item['volume'])) {
-                    $calculator->addGoodsItemByVolume($item['weight'], $item['volume']);
-                } else {
-                    $calculator->addGoodsItemBySize($item['weight'], $item['length'], $item['width'], $item['height']);
-                }
+        $calculator = new CdekCalculator($this->account, $this->password);
+        $result = $calculator->calculate($data);
+        if (!isset($result['result']) || empty($result['result'])) {
+            $exception = null;
+            foreach ($result as $error) {
+                $exception = new CdekException($error['text'], $error['code'], $exception);
             }
-        } catch (\Exception $e) {
-            throw new CdekException($e->getMessage());
-        }
-        if (!$calculator->calculate()) {
-            throw new CdekException($calculator->getError(), 400);
+            throw $exception;
         }
 
-        return $calculator->getResult();
+        return $result;
     }
 }
