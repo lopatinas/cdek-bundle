@@ -54,7 +54,7 @@ class CdekService
         $result = $calculator->calculate($data);
         if (!isset($result['result']) || empty($result['result'])) {
             $exception = null;
-            foreach ($result as $error) {
+            foreach ($result['error'] as $error) {
                 $exception = new CdekException($error['text'], $error['code'], $exception);
             }
             throw $exception;

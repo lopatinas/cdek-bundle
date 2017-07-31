@@ -31,6 +31,18 @@ class CdekCalculator
     private $authPassword;
 
     /**
+     * @var array
+     */
+    private $tariffList = [
+        ['priority' => 0, 'tariff' => 234],
+        ['priority' => 1, 'tariff' => 233],
+        ['priority' => 2, 'tariff' => 136],
+        ['priority' => 3, 'tariff' => 137],
+        ['priority' => 4, 'tariff' => 138],
+        ['priority' => 5, 'tariff' => 139],
+    ];
+
+    /**
      * CdekCalculator constructor.
      * @param $account
      * @param $password
@@ -79,6 +91,7 @@ class CdekCalculator
             'version' => $this->version,
             'authLogin' => $this->authLogin,
             'secure' => $this->getSecureAuthPassword($data['dateExecute']),
+            'tariffList' => $this->tariffList,
         ]);
 
         return $this->request($data);
