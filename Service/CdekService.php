@@ -11,10 +11,9 @@ class CdekService
     /** @var CdekSdk */
     private $cdek;
 
-    private $calculator;
-
     /** @var string */
     private $account;
+
     /** @var string */
     private $password;
 
@@ -41,10 +40,39 @@ class CdekService
     {
         try {
             $this->cdek = new CdekSdk($this->account, $this->password);
-            $this->calculator = new CalculatePriceDeliveryCdek();
-            $this->calculator->setAuth($this->account, $this->password);
         } catch (\Exception $e) {
             throw new CdekException($e->getMessage(), $e->getCode(), $e->getPrevious());
         }
+    }
+
+    /**
+     * @param array $data
+     * @return array
+     */
+    public function calculate(array $data)
+    {
+        $calculator = new CalculatePriceDeliveryCdek();
+        $calculator->setAuth($this->account, $this->password);
+        try {
+            $calculator->setDateExecute($data['date']);
+            $calculator->setReceiverCityId($data['receiverCityId']);
+            $calculator->setSenderCityId($data['senderCityId']);
+            $calculator->setTariffId($data['tariffId']);
+            $calculator->setModeDeliveryId($data['deliveryModeId']);
+            foreach ($data['items'] as $item) {
+                if (!empty($item['volume'])) {
+                    $calculator->addGoodsItemByVolume($item['weight'], $item['volume']);
+                } else {
+                    $calculator->addGoodsItemBySize($item['weight'], $item['length'], $item['width'], $item['height']);
+                }
+            }
+        } catch (\Exception $e) {
+            throw new CdekException($e->getMessage());
+        }
+        if (!$calculator->calculate()) {
+            throw new CdekException($calculator->getError(), 400);
+        }
+
+        return $calculator->getResult();
     }
 }
