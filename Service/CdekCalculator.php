@@ -68,7 +68,7 @@ class CdekCalculator
             if (!isset($item['weight']) || empty($item['weight'])) {
                 throw new CdekCalculatorPayloadException('Item "weight" is required');
             }
-            if (!isset($item['volume']) || empty($item['volume']) && (!isset($item['length']) || empty($item['length'])
+            if ((!isset($item['volume']) || empty($item['volume'])) && (!isset($item['length']) || empty($item['length'])
                     || !isset($item['width']) || empty($item['width']) || !isset($item['height']) || empty($item['height']))
             ) {
                 throw new CdekCalculatorPayloadException('Item "volume" or "length", "height" and "width" are required');
