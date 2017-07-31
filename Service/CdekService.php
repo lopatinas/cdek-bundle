@@ -2,6 +2,7 @@
 
 namespace Lopatinas\CdekBundle\Service;
 
+use Errogaht\CDEK\CalculatePriceDeliveryCdek;
 use Errogaht\CDEK\CdekSdk;
 use Lopatinas\CdekBundle\Exception\CdekException;
 
@@ -9,6 +10,8 @@ class CdekService
 {
     /** @var CdekSdk */
     private $cdek;
+
+    private $calculator;
 
     /** @var string */
     private $account;
@@ -38,6 +41,8 @@ class CdekService
     {
         try {
             $this->cdek = new CdekSdk($this->account, $this->password);
+            $this->calculator = new CalculatePriceDeliveryCdek();
+            $this->calculator->setAuth($this->account, $this->password);
         } catch (\Exception $e) {
             throw new CdekException($e->getMessage(), $e->getCode(), $e->getPrevious());
         }
