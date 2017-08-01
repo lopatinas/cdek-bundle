@@ -34,12 +34,12 @@ class CdekCalculator
      * @var array
      */
     private $tariffList = [
-        ['priority' => 0, 'tariff' => 234],
-        ['priority' => 1, 'tariff' => 233],
-        ['priority' => 2, 'tariff' => 136],
-        ['priority' => 3, 'tariff' => 137],
-        ['priority' => 4, 'tariff' => 138],
-        ['priority' => 5, 'tariff' => 139],
+        ['priority' => 0, 'id' => 62],
+        ['priority' => 1, 'id' => 63],
+        ['priority' => 2, 'id' => 15],
+        ['priority' => 3, 'id' => 16],
+        ['priority' => 4, 'id' => 17],
+        ['priority' => 5, 'id' => 18],
     ];
 
     /**
