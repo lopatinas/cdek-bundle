@@ -46,11 +46,15 @@ class CdekCalculator
      * CdekCalculator constructor.
      * @param $account
      * @param $password
+     * @param $tariffList
      */
-    public function __construct($account, $password)
+    public function __construct($account, $password, $tariffList = null)
     {
         $this->authLogin = $account;
         $this->authPassword = $password;
+        if (is_array($tariffList) && !empty($tariffList)) {
+            $this->tariffList = $tariffList;
+        }
     }
 
     /**
@@ -64,12 +68,12 @@ class CdekCalculator
             $data['dateExecute'] = date('Y-m-d');
         }
 
-        if (!isset($data['senderCityPostCode']) || empty ($data['senderCityPostCode'])) {
-            throw new CdekCalculatorPayloadException('"senderCityPostCode" is required');
+        if (!isset($data['senderCityId']) || empty ($data['senderCityId'])) {
+            throw new CdekCalculatorPayloadException('"senderCityId" is required');
         }
 
-        if (!isset($data['receiverCityPostCode']) || empty ($data['receiverCityPostCode'])) {
-            throw new CdekCalculatorPayloadException('"receiverCityPostCode" is required');
+        if (!isset($data['receiverCityId']) || empty ($data['receiverCityId'])) {
+            throw new CdekCalculatorPayloadException('"receiverCityId" is required');
         }
 
         if (!isset($data['goods']) || empty($data['goods']) || !is_array($data['goods'])) {
