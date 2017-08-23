@@ -17,6 +17,23 @@ class CdekService
     private $password;
 
     public static $tariffs = [
+        1 => 'Экспресс лайт дверь-дверь',
+        3 => 'Супер-экспресс до 18',
+        5 => 'Экономичный экспресс склад-склад',
+        10 => 'Экспресс лайт склад-склад',
+        11 => 'Экспресс лайт склад-дверь',
+        12 => 'Экспресс лайт дверь-склад',
+        15 => 'Экспресс тяжеловесы склад-склад',
+        16 => 'Экспресс тяжеловесы склад-дверь',
+        17 => 'Экспресс тяжеловесы дверь-склад',
+        18 => 'Экспресс тяжеловесы дверь-дверь',
+        57 => 'Супер-экспресс до 9',
+        58 => 'Супер-экспресс до 10',
+        59 => 'Супер-экспресс до 12',
+        60 => 'Супер-экспресс до 14',
+        61 => 'Супер-экспресс до 16',
+        62 => 'Магистральный экспресс склад-склад',
+        63 => 'Магистральный супер-экспресс склад-склад',
         136 => 'Посылка склад-склад',
         137 => 'Посылка склад-дверь',
         138 => 'Посылка дверь-склад',
@@ -27,20 +44,11 @@ class CdekService
         293 => 'CDEK Express дверь-дверь',
         294 => 'CDEK Express склад-дверь',
         295 => 'CDEK Express дверь-склад',
+        301 => 'До постомата InPost дверь-склад',
+        302 => 'До постомата InPost склад-склад',
     ];
 
-    public static $tariffPriorityList = [
-        ['priority' => 0, 'id' => 136],
-        ['priority' => 1, 'id' => 137],
-        ['priority' => 2, 'id' => 138],
-        ['priority' => 3, 'id' => 139],
-        ['priority' => 4, 'id' => 233],
-        ['priority' => 5, 'id' => 234],
-        ['priority' => 6, 'id' => 291],
-        ['priority' => 7, 'id' => 293],
-        ['priority' => 8, 'id' => 294],
-        ['priority' => 9, 'id' => 295],
-    ];
+    public $tariffPriorityList = [];
 
     /**
      * @param $account
@@ -76,7 +84,8 @@ class CdekService
      */
     public function calculate(array $data)
     {
-        $calculator = new CdekCalculator($this->account, $this->password, self::$tariffPriorityList);
+        $this->initTariffPriorityList();
+        $calculator = new CdekCalculator($this->account, $this->password, $this->tariffPriorityList);
         $result = $calculator->calculate($data);
         if (!isset($result['result']) || empty($result['result'])) {
             $exception = null;
@@ -100,5 +109,17 @@ class CdekService
         }
 
         return self::$tariffs[$tariffId];
+    }
+
+    private function initTariffPriorityList()
+    {
+        $priority = 0;
+        foreach (self::$tariffs as $id => $name) {
+            $this->tariffPriorityList[] = [
+                'priority' => $priority,
+                'id' => $id,
+            ];
+            $priority++;
+        }
     }
 }
